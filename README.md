@@ -8,3 +8,8 @@ My project was implemented exclusively for those who are on Linux, so if you wan
 ```
 git clone https://github.com/tornado4444/Vulkan-Triangle.git
 ```
+Then need to build:
+```
+make
+make run
+```
