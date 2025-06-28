@@ -5,11 +5,15 @@ LDFLAGS = -lglfw -lvulkan -ldl -lpthread -lX11 -lXxf86vm -lXrandr -lXi
 SRCDIR = .
 SOURCES = $(wildcard $(SRCDIR)/*.cpp)
 OBJECTS = $(SOURCES:.cpp=.o)
-TARGET = vulkan_app
+TARGET = vulkan_triangle
 
-SHADERS = triangle.vert.spv triangle.frag.spv
+VERTEX_SHADERS = $(wildcard *.vert)
+FRAGMENT_SHADERS = $(wildcard *.frag)
+VERTEX_SPV = $(VERTEX_SHADERS:.vert=.vert.spv)
+FRAGMENT_SPV = $(FRAGMENT_SHADERS:.frag=.frag.spv) 
+SHADERS = $(VERTEX_SPV) $(FRAGMENT_SPV)
 
-.PHONY: all clean debug run
+.PHONY: all clean debug run shaders
 
 all: $(TARGET)
 
@@ -19,10 +23,10 @@ $(TARGET): $(OBJECTS) $(SHADERS)
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-%.spv: %.vert
+%.vert.spv: %.vert
 	glslangValidator -V $< -o $@
 
-%.spv: %.frag
+%.frag.spv: %.frag
 	glslangValidator -V $< -o $@
 
 debug: CXXFLAGS += -DDEBUG -g
